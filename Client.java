@@ -1,3 +1,4 @@
+
 import java.io.*;
 import java.net.*;
 
@@ -20,6 +21,21 @@ public class Client {
                     + socket.getRemoteSocketAddress());
 
             System.out.println("La porta usata e' " +  socket.getLocalPort());
+            
+            //output stream
+            PrintWriter out = new PrintWriter(socket.getOutputStream());
+            //input stream
+            BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+            
+            //Gets the incoming stream
+            System.out.println(in.readLine());
+            
+            //Sends synchronization request
+            out.write("Voglio sincronizzarmi\n");
+            out.flush();
+            
+            //Gets the timestamp
+            System.out.println(in.readLine());
             
         } catch (ConnectException ex) {
             System.err.println("errore connessione " + ex);

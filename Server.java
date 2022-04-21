@@ -1,5 +1,8 @@
+
 import java.io.*;
 import java.net.*;
+import java.time.*;
+import java.time.format.DateTimeFormatter;
 
 /**
  *
@@ -23,6 +26,31 @@ public class Server {
 
             System.out.println("Connesso con "
                     + socket.getRemoteSocketAddress());
+
+            //output stream
+            PrintWriter out = new PrintWriter(socket.getOutputStream());
+            //input stream
+            BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+
+            //Greets the client
+            out.write("Ciao utente " + socket.getRemoteSocketAddress() + "\n");
+            out.flush();
+
+            //Check synchronization request
+            String s = in.readLine();
+            if ("Voglio sincronizzarmi".equals(s)) {
+
+                //Get current date and time
+                ZonedDateTime now = ZonedDateTime.now();
+                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss a");
+                //Convert the ZonedDateTime to a formatted string
+                String time = now.format(formatter);
+
+                //Outputs the time to the stream
+                out.write(time);
+                out.flush();
+
+            }
 
         } catch (BindException ex) {
             System.err.println("errore apertura " + ex);
